@@ -2,11 +2,11 @@
 
 :root {
   --background: #F4F4F2; /* neutral-cream */
-  --foreground: #171717; /* A dark gray for text */
+  --foreground: #124C2F; /* forest-green */
 }
 
 .dark {
-  --background: #171717; /* A dark gray for background */
+  --background: #5A381E; /* earthy-brown */
   --foreground: #F4F4F2; /* neutral-cream */
 }
 
