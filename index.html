@@ -230,6 +230,25 @@
 
     /* Brand accents (used in icons) */
     .badge svg, .badge img { width: 22px; height: 22px; display: block; }
+
+    /* Mobile optimizations */
+    @media (max-width: 700px) {
+      body { padding: 20px 14px; }
+      .card { padding: 18px; border-radius: 22px; }
+      .header {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 18px;
+        text-align: center;
+      }
+      .avatar { --size: 108px; margin-inline: auto; align-self: center; }
+      .content { max-width: none; border-left: 0; padding-left: 0; }
+      h1 { letter-spacing: 0.4px; }
+      .tagline { justify-content: center; gap: 8px; margin-bottom: 10px; }
+      .links { grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
+      .button { padding: 16px 18px; }
+    }
   </style>
 </head>
 <body>
@@ -303,6 +322,13 @@
       for (var i=0;i<links.length;i++){
         links[i].addEventListener('click', trackLinkClick, { passive: true });
       }
+      // Optional debug: append ?ga_debug=1 to URL to verify GA events in DebugView
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('ga_debug') === '1' && window.gtag) {
+          window.gtag('event', 'debug_ping', { debug_mode: true, note: 'Manual GA debug ping' });
+        }
+      } catch(_) {}
     })();
   </script>
 </body>
