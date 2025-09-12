@@ -146,9 +146,9 @@
       font-weight: 400;
     }
     .bio-wrap { margin-top: 4px; }
-    @media (min-width: 980px) {
-      .bio-wrap { columns: 2; column-gap: 28px; }
-      .bio { break-inside: avoid-column; }
+    .content { max-width: 72ch; }
+    @media (min-width: 900px) {
+      .content { border-left: 1px solid rgba(255,255,255,0.08); padding-left: clamp(16px, 3vw, 24px); }
     }
     .bio + .bio { margin-top: 10px; }
 
@@ -217,7 +217,7 @@
         <div class="avatar" aria-hidden="true">
           <img src="Headshot Green.png" alt="Portrait of Luke Greenwood">
         </div>
-        <div>
+        <div class="content">
           <h1>Luke Greenwood</h1>
           <p class="tagline"><span class="k">Operator</span><span class="sep">•</span><span class="k">Musician</span><span class="sep">•</span><span class="k">Poet</span></p>
           <div class="bio-wrap">
