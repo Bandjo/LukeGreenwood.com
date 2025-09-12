@@ -255,7 +255,7 @@
       </header>
 
       <nav class="links" aria-label="Primary links">
-        <a class="button" href="https://www.linkedin.com/in/lukegreenwood/" target="_blank" rel="noopener noreferrer" aria-label="Work (LinkedIn) — opens in a new tab">
+        <a class="button" href="https://www.linkedin.com/in/lukegreenwood/" target="_blank" rel="noopener noreferrer" aria-label="Work (LinkedIn) — opens in a new tab" data-label="Work" data-platform="linkedin">
           <span class="left">
             <span class="badge" aria-hidden="true"><img src="https://www.linkedin.com/favicon.ico" alt="" width="22" height="22" loading="lazy" decoding="async"></span>
             <span class="label">Work</span>
@@ -263,7 +263,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
         </a>
 
-        <a class="button" href="https://www.youtube.com/@lukegreenwood" target="_blank" rel="noopener noreferrer" aria-label="Music (YouTube) — opens in a new tab">
+        <a class="button" href="https://www.youtube.com/@lukegreenwood" target="_blank" rel="noopener noreferrer" aria-label="Music (YouTube) — opens in a new tab" data-label="Music" data-platform="youtube">
           <span class="left">
             <span class="badge" aria-hidden="true"><img src="https://www.youtube.com/favicon.ico" alt="" width="22" height="22" loading="lazy" decoding="async"></span>
             <span class="label">Music</span>
@@ -271,7 +271,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
         </a>
 
-        <a class="button" href="https://www.amazon.com/Comfort-Chaos-Luke-B-Greenwood/dp/B0DV4CD481" target="_blank" rel="noopener noreferrer" aria-label="Poetry (Amazon) — opens in a new tab">
+        <a class="button" href="https://www.amazon.com/Comfort-Chaos-Luke-B-Greenwood/dp/B0DV4CD481" target="_blank" rel="noopener noreferrer" aria-label="Poetry (Amazon) — opens in a new tab" data-label="Poetry" data-platform="amazon">
           <span class="left">
             <span class="badge" aria-hidden="true"><img src="https://www.amazon.com/favicon.ico" alt="" width="22" height="22" loading="lazy" decoding="async"></span>
             <span class="label">Poetry</span>
@@ -282,5 +282,28 @@
 
     </section>
   </main>
+  <script>
+    (function(){
+      function trackLinkClick(e){
+        try {
+          var a = e.currentTarget;
+          var label = a.dataset.label || (a.querySelector('.label') && a.querySelector('.label').textContent.trim()) || 'link';
+          var url = a.href;
+          var platform = a.dataset.platform || (new URL(url)).hostname;
+          if (window.gtag) {
+            window.gtag('event', 'link_click', {
+              link_label: label,
+              link_url: url,
+              link_platform: platform
+            });
+          }
+        } catch (_) { /* no-op */ }
+      }
+      var links = document.querySelectorAll('nav.links a.button');
+      for (var i=0;i<links.length;i++){
+        links[i].addEventListener('click', trackLinkClick, { passive: true });
+      }
+    })();
+  </script>
 </body>
 </html>
