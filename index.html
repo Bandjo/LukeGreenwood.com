@@ -224,7 +224,10 @@
     <section class="card" aria-label="Profile">
       <header class="header">
         <div class="avatar" aria-hidden="true">
-          <img src="headshot-green-480.jpg" alt="Portrait of Luke Greenwood" decoding="async" fetchpriority="high">
+          <picture>
+            <source type="image/jpeg" srcset="headshot-green-480.jpg 1x, headshot-green-960.jpg 2x">
+            <img src="headshot-green-480.jpg" alt="Portrait of Luke Greenwood" width="480" height="480" decoding="async" fetchpriority="high">
+          </picture>
         </div>
         <div class="content">
           <h1>Luke Greenwood</h1>
