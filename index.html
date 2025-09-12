@@ -65,7 +65,7 @@
     }
 
     .shell {
-      width: min(960px, 100%);
+      width: min(1080px, 100%);
       position: relative;
       isolation: isolate;
     }
@@ -89,13 +89,13 @@
     .header {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 22px clamp(18px, 4vw, 28px);
-      align-items: center;
-      margin-bottom: 22px;
+      gap: clamp(22px, 4.5vw, 36px);
+      align-items: start;
+      margin-bottom: 24px;
     }
 
     .avatar {
-      --size: clamp(84px, 16vw, 132px);
+      --size: clamp(120px, 23vw, 220px);
       width: var(--size);
       height: var(--size);
       border-radius: 50%;
@@ -124,7 +124,7 @@
       color: #FFFFFF; /* pure white for name */
     }
     .tagline {
-      margin: 0 0 8px 0; /* add breathing room above bio */
+      margin: 0 0 12px 0; /* a bit more room above bio */
       color: var(--panel-subtle);
       font-size: clamp(14px, 2.2vw, 18px);
       font-weight: 500;
@@ -144,6 +144,11 @@
       font-size: clamp(14px, 2.1vw, 16px);
       line-height: 1.65; /* easier reading rhythm */
       font-weight: 400;
+    }
+    .bio-wrap { margin-top: 4px; }
+    @media (min-width: 980px) {
+      .bio-wrap { columns: 2; column-gap: 28px; }
+      .bio { break-inside: avoid-column; }
     }
     .bio + .bio { margin-top: 10px; }
 
@@ -215,10 +220,12 @@
         <div>
           <h1>Luke Greenwood</h1>
           <p class="tagline"><span class="k">Operator</span><span class="sep">•</span><span class="k">Musician</span><span class="sep">•</span><span class="k">Poet</span></p>
-          <p class="bio">I'm a leader, musician, and poet who loves connecting sounds, words, and people to build beautiful things.</p>
-          <p class="bio">I’ve spent years as an operator and program manager, building high-performing products and teams at Lyft, Rivian, Bear Flag Robotics, and John Deere. My zone of genius is connecting diverse teams across hardware, software, and operations. I like to think of myself as a conductor, selecting the music and ensuring everyone is synchronized while the masters perform.</p>
-          <p class="bio">I play over a dozen instruments with a focus on dobro, guitar, bass, and percussion. I love learning and tend to pick up a new instrument every year. My favorite thing is live improvisation, tuning in to the people in a room to perform the right music for the moment.</p>
-          <p class="bio">I’ve published a book, Comfort and Chaos, which dives into the tension between the pace of modernity and the rhythms of nature. I believe art is best shared in the physical world, so my book is only available as a hard copy, and most of my music only exists while I’m playing it.</p>
+          <div class="bio-wrap">
+            <p class="bio">I'm a leader, musician, and poet who loves connecting sounds, words, and people to build beautiful things.</p>
+            <p class="bio">I’ve spent years as an operator and program manager, building high-performing products and teams at Lyft, Rivian, Bear Flag Robotics, and John Deere. My zone of genius is connecting diverse teams across hardware, software, and operations. I like to think of myself as a conductor, selecting the music and ensuring everyone is synchronized while the masters perform.</p>
+            <p class="bio">I play over a dozen instruments with a focus on dobro, guitar, bass, and percussion. I love learning and tend to pick up a new instrument every year. My favorite thing is live improvisation, tuning in to the people in a room to perform the right music for the moment.</p>
+            <p class="bio">I’ve published a book, Comfort and Chaos, which dives into the tension between the pace of modernity and the rhythms of nature. I believe art is best shared in the physical world, so my book is only available as a hard copy, and most of my music only exists while I’m playing it.</p>
+          </div>
         </div>
       </header>
 
