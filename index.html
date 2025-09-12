@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luke Greenwood — Operator • Musician • Poet</title>
+  <meta name="description" content="The personal landing page of Luke Greenwood — builder, musician, and poet.">
+  <meta name="theme-color" content="#162b1d" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#162b1d" media="(prefers-color-scheme: light)">
+  <meta property="og:title" content="Luke Greenwood">
+  <meta property="og:description" content="Operator • Musician • Poet">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="Headshot_1_-removebg-preview(7)(1).png">
+  <meta property="og:image:alt" content="Portrait of Luke Greenwood">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23162b1d'/%3E%3Ctext x='50%25' y='56%25' font-size='28' text-anchor='middle' fill='%23fdf9f0' font-family='Segoe UI, Roboto, Arial, sans-serif' font-weight='700'%3ELG%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #162b1d; /* dark green background */
+      --bg-accent: #193221;
+      --text: #0f2416; /* deep forest */
+      --subtle: #6B7A70; /* muted green-gray */
+      --border: #224632; /* border that sits on dark green */
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --ring: 0 0 0 2px rgba(47, 109, 51, 0.38);
+      --gold: #FACC15; /* accent gold */
+      --panel: #0F2A1A; /* evergreen card */
+      --panel-text: #F0F5ED; /* light text */
+      --panel-subtle: #C7D7CE; /* subtle light text */
+      --panel-border: #335C44; /* lighter mossy border for separation */
+      --brand-linkedin: #0a66c2;
+      --brand-youtube: #ff0000;
+      --brand-amazon: #ff9900;
+      --brand-forest: #2e7d32; /* evergreen */
+      --accent: linear-gradient(135deg, #2e7d32, #facc15); /* green to sunlight gold */
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #162b1d; /* keep deep background */
+        --bg-accent: #193221;
+        --text: #0F2416;
+        --subtle: #6B7A70;
+        --border: #21452f;
+        --shadow: 0 20px 40px rgba(0,0,0,0.40);
+        --ring: 0 0 0 2px rgba(47, 109, 51, 0.5);
+        --panel: #0F2A1A; /* evergreen card */
+        --panel-text: #F0F5ED;
+        --panel-subtle: #C7D7CE;
+        --panel-border: #1A3A27;
+      }
+    }
+
+    /* Layout */
+    html, body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg); /* solid background */
+      display: grid;
+      place-items: center;
+      padding: 32px 18px;
+    }
+
+    .shell {
+      width: min(960px, 100%);
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* Decorative glow */
+    .shell::before { content: ""; display: none; }
+
+    .card {
+      position: relative;
+      background: var(--panel);
+      color: var(--panel-text);
+      border: 1px solid var(--panel-border);
+      border-radius: 28px;
+      box-shadow:
+        0 6px 18px rgba(28, 84, 52, 0.26),  /* tighter, crisper, green-tinted */
+        0 22px 70px rgba(46, 125, 50, 0.16); /* soft, wide, mossy lift */
+      padding: clamp(28px, 5.6vw, 44px); /* slight extra breathing room */
+    }
+    
+
+    .header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 22px clamp(18px, 4vw, 28px);
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .avatar {
+      --size: clamp(84px, 16vw, 132px);
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 3px;
+      background: var(--accent);
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      background: #d1d5db;
+      box-shadow: 0 0 0 3px #DBE1D8; /* soft sage ring */
+    }
+
+    h1 {
+      font-size: clamp(32px, 6vw, 52px); /* +15-20% */
+      line-height: 1.05;
+      margin: 0 0 10px 0;
+      letter-spacing: 0.5px; /* slight increase */
+      font-weight: 700;
+      color: #FFFFFF; /* pure white for name */
+    }
+    .tagline {
+      margin: 0 0 8px 0; /* add breathing room above bio */
+      color: var(--panel-subtle);
+      font-size: clamp(14px, 2.2vw, 18px);
+      font-weight: 500;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      letter-spacing: 0.02em;
+    }
+    .tagline .k { color: var(--panel-text); opacity: 0.95; }
+    .tagline .sep { color: var(--gold); opacity: 0.9; }
+
+    .bio {
+      margin: 16px 0 0 0;
+      color: var(--panel-text);
+      opacity: 0.9;
+      font-size: clamp(14px, 2.1vw, 16px);
+      line-height: 1.65; /* easier reading rhythm */
+      font-weight: 400;
+    }
+    .bio + .bio { margin-top: 10px; }
+
+    /* Links */
+    .links {
+      margin-top: clamp(16px, 4vw, 28px);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .button {
+      text-decoration: none;
+      color: var(--panel-text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid color-mix(in oklab, var(--panel-border), #ffffff 18%);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 80%, #ffffff 20%), color-mix(in oklab, var(--panel) 76%, #ffffff 24%));
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+      will-change: transform;
+      position: relative;
+      overflow: hidden;
+    }
+    .button:focus-visible {
+      outline: none;
+      box-shadow: var(--ring);
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in oklab, var(--panel-border), var(--gold) 55%);
+      box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.18), 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .button > svg { transition: stroke .2s ease, transform .2s ease; }
+    .button:hover > svg { stroke: var(--gold); transform: translateX(1px); }
+    .button .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .button .badge {
+      flex: 0 0 auto;
+      width: 28px; height: 28px;
+      display: grid; place-items: center;
+    }
+    .button .label {
+      font-weight: 500;
+      letter-spacing: 0.005em;
+    }
+    .button svg {
+      width: 18px; height: 18px;
+      opacity: .9;
+    }
+
+    /* Brand accents (used in icons) */
+    .badge svg, .badge img { width: 22px; height: 22px; display: block; }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="card" aria-label="Profile">
+      <header class="header">
+        <div class="avatar" aria-hidden="true">
+          <img src="Headshot Green.png" alt="Portrait of Luke Greenwood">
+        </div>
+        <div>
+          <h1>Luke Greenwood</h1>
+          <p class="tagline"><span class="k">Operator</span><span class="sep">•</span><span class="k">Musician</span><span class="sep">•</span><span class="k">Poet</span></p>
+          <p class="bio">I'm a leader, musician, and poet who loves connecting sounds, words, and people to build beautiful things.</p>
+          <p class="bio">I’ve spent years as an operator and program manager, building high-performing products and teams at Lyft, Rivian, Bear Flag Robotics, and John Deere. My zone of genius is connecting diverse teams across hardware, software, and operations. I like to think of myself as a conductor, selecting the music and ensuring everyone is synchronized while the masters perform.</p>
+          <p class="bio">I play over a dozen instruments with a focus on dobro, guitar, bass, and percussion. I love learning and tend to pick up a new instrument every year. My favorite thing is live improvisation, tuning in to the people in a room to perform the right music for the moment.</p>
+          <p class="bio">I’ve published a book, Comfort and Chaos, which dives into the tension between the pace of modernity and the rhythms of nature. I believe art is best shared in the physical world, so my book is only available as a hard copy, and most of my music only exists while I’m playing it.</p>
+        </div>
+      </header>
+
+      <nav class="links" aria-label="Primary links">
+        <a class="button" href="https://www.linkedin.com/in/lukegreenwood/" target="_blank" rel="noopener noreferrer" aria-label="Work (LinkedIn) — opens in a new tab">
+          <span class="left">
+            <span class="badge" aria-hidden="true"><img src="https://www.linkedin.com/favicon.ico" alt=""></span>
+            <span class="label">Work</span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+
+        <a class="button" href="https://www.youtube.com/@lukegreenwood" target="_blank" rel="noopener noreferrer" aria-label="Music (YouTube) — opens in a new tab">
+          <span class="left">
+            <span class="badge" aria-hidden="true"><img src="https://www.youtube.com/favicon.ico" alt=""></span>
+            <span class="label">Music</span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+
+        <a class="button" href="https://www.amazon.com/Comfort-Chaos-Luke-B-Greenwood/dp/B0DV4CD481" target="_blank" rel="noopener noreferrer" aria-label="Poetry (Amazon) — opens in a new tab">
+          <span class="left">
+            <span class="badge" aria-hidden="true"><img src="https://www.amazon.com/favicon.ico" alt=""></span>
+            <span class="label">Poetry</span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+        </a>
+      </nav>
+
+    </section>
+  </main>
+</body>
+</html>
