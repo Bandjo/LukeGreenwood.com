@@ -187,11 +187,19 @@
       gap: 12px;
     }
 
-    /* Contact line (grid placement only) */
-    .contact-line {
-      grid-column: 1 / -1;
-      justify-self: center;
+    /* Contact footer: sits outside card, doesn't affect layout */
+    .contact-footer {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: clamp(12px, 3vh, 24px);
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95em;
+      padding: 0 12px;
+      z-index: 1;
     }
+    .contact-footer a { color: #4ade80; text-decoration: none; font-weight: 500; }
 
     .button {
       text-decoration: none;
@@ -338,9 +346,9 @@
       </nav>
 
     </section>
-    <div class="contact-line" style="text-align: center; margin-top: 2.5rem; color: rgba(255,255,255,0.8); font-size: 0.95em;">
+    <div class="contact-footer">
       Want to jam, build, or chat?
-      <a href="mailto:lukecodes@gmail.com" style="color: #4ade80; text-decoration: none; font-weight: 500;">Email me.</a>
+      <a href="mailto:lukecodes@gmail.com">Email me.</a>
     </div>
   </main>
   <script>
