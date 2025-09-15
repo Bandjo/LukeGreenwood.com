@@ -195,10 +195,11 @@
       margin-top: 1rem; /* tighter spacing to prevent scroll */
     }
     .contact-line a { color: #4ade80; text-decoration: none; font-weight: 500; }
+    /* Only disable scroll when content fits */
+    html.no-scroll, body.no-scroll { overflow-y: hidden; }
 
-    /* Desktop: keep to a single, non-scrolling page */
+    /* Desktop tweaks */
     @media (min-width: 900px) {
-      html, body { height: 100dvh; overflow-y: hidden; }
       body { padding: 20px 18px; }
       .contact-line { margin-top: clamp(8px, 1.6vh, 16px); }
     }
@@ -355,6 +356,30 @@
   </main>
   <script>
     (function(){
+      // Toggle scroll only when everything fits in view (desktop)
+      function updateScrollLock(){
+        try {
+          var isDesktop = window.matchMedia('(min-width: 900px)').matches;
+          var root = document.documentElement;
+          var body = document.body;
+          if (!isDesktop) {
+            root.classList.remove('no-scroll');
+            body.classList.remove('no-scroll');
+            return;
+          }
+          var fits = (document.documentElement.scrollHeight <= window.innerHeight + 1);
+          if (fits) {
+            root.classList.add('no-scroll');
+            body.classList.add('no-scroll');
+          } else {
+            root.classList.remove('no-scroll');
+            body.classList.remove('no-scroll');
+          }
+        } catch (_) { /* no-op */ }
+      }
+      window.addEventListener('load', updateScrollLock);
+      window.addEventListener('resize', function(){ window.requestAnimationFrame(updateScrollLock); });
+
       function trackLinkClick(e){
         try {
           var a = e.currentTarget;
@@ -381,6 +406,9 @@
           window.gtag('event', 'debug_ping', { debug_mode: true, note: 'Manual GA debug ping' });
         }
       } catch(_) {}
+
+      // Initial pass
+      updateScrollLock();
     })();
   </script>
 </body>
