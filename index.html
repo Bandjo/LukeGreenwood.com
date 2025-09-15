@@ -77,9 +77,8 @@
     }
 
     /* Layout */
-    html, body {
-      height: 100%;
-    }
+    /* Prevent padding from forcing a tiny scroll bar */
+    /* Use viewport-relative min-height and include padding in box model */
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, system-ui, sans-serif;
@@ -87,8 +86,14 @@
       background: var(--bg); /* solid background */
       display: grid;
       place-items: center;
+      box-sizing: border-box;
+      min-height: 100vh;
+      min-height: 100dvh; /* modern dynamic viewport to avoid iOS bars */
       padding: 32px 18px;
     }
+
+    /* When content fits, lock scroll (toggled via JS on desktop) */
+    html.no-scroll, body.no-scroll { overflow: hidden; }
 
     .shell {
       width: min(1080px, 100%);
@@ -192,7 +197,21 @@
       text-align: center;
       color: rgba(255,255,255,0.8);
       font-size: 0.95em;
-      margin-top: 2.5rem; /* breathing room under card */
+      margin-top: 1.25rem; /* modest spacing under card by default */
+    }
+
+    /* When scroll is locked on desktop, pin footer to viewport bottom
+       so it doesn't influence card centering. */
+    @media (min-width: 900px) {
+      html.no-scroll .contact-line,
+      body.no-scroll .contact-line {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 18px; /* match body padding */
+        margin-top: 0;
+        padding: 0 18px;
+      }
     }
     .contact-line a { color: #4ade80; text-decoration: none; font-weight: 500; }
 
