@@ -350,6 +350,32 @@
   </main>
   <script>
     (function(){
+      // Toggle scroll only when everything fits in view (desktop)
+      function updateScrollLock(){
+        try {
+          var isDesktop = window.matchMedia('(min-width: 900px)').matches;
+          var root = document.documentElement;
+          var body = document.body;
+          if (!isDesktop) {
+            root.classList.remove('no-scroll');
+            body.classList.remove('no-scroll');
+            return;
+          }
+          var scrollEl = document.scrollingElement || document.documentElement;
+          var canScroll = (scrollEl.scrollHeight - scrollEl.clientHeight) > 1; // allow 1px tolerance
+          var fits = !canScroll;
+          if (fits) {
+            root.classList.add('no-scroll');
+            body.classList.add('no-scroll');
+          } else {
+            root.classList.remove('no-scroll');
+            body.classList.remove('no-scroll');
+          }
+        } catch (_) { /* no-op */ }
+      }
+      window.addEventListener('load', updateScrollLock);
+      window.addEventListener('resize', function(){ window.requestAnimationFrame(updateScrollLock); });
+
       function trackLinkClick(e){
         try {
           var a = e.currentTarget;
@@ -377,6 +403,8 @@
         }
       } catch(_) {}
 
+      // Initial pass
+      updateScrollLock();
     })();
   </script>
 </body>
