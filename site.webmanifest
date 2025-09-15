@@ -1,0 +1,13 @@
+{
+  "name": "Luke Greenwood",
+  "short_name": "LukeG",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#162B1D",
+  "theme_color": "#162B1D",
+  "icons": [
+    { "src": "/headshot-green-480.jpg", "sizes": "480x480", "type": "image/jpeg" },
+    { "src": "/Headshot Green.png", "sizes": "1024x1024", "type": "image/png" }
+  ]
+}
+
