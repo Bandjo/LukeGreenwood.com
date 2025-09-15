@@ -285,6 +285,12 @@
       .button { padding: 16px 18px; }
     }
 
+    /* Tablet tweaks: top-align avatar next to text */
+    @media (min-width: 701px) and (max-width: 899px) {
+      .header { align-items: start; }
+      .avatar { align-self: start; }
+    }
+
     /* Small-height landscape (e.g., iPhone horizontal) */
     @media (orientation: landscape) and (max-height: 480px) {
       body { padding: 12px; }
