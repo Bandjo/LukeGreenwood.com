@@ -367,7 +367,9 @@
             body.classList.remove('no-scroll');
             return;
           }
-          var fits = (document.documentElement.scrollHeight <= window.innerHeight + 1);
+          var scrollEl = document.scrollingElement || document.documentElement;
+          var canScroll = (scrollEl.scrollHeight - scrollEl.clientHeight) > 1; // allow 1px tolerance
+          var fits = !canScroll;
           if (fits) {
             root.classList.add('no-scroll');
             body.classList.add('no-scroll');
