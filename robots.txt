@@ -1,4 +1,6 @@
 User-agent: *
+Disallow: /print/
+Disallow: /print
 Allow: /
 Sitemap: https://www.lukegreenwood.com/sitemap.xml
 

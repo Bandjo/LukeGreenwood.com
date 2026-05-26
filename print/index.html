@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Paper Generator</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="apple-touch-icon" href="../Headshot Green.png">
+<link rel="manifest" href="../site.webmanifest">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z8ZV3XF2VK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} // eslint-disable-line
+  gtag('js', new Date());
+
+  gtag('config', 'G-Z8ZV3XF2VK');
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #e8edf3;
+  color: #334155;
+  font-size: 13px;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────── */
+#sidebar {
+  width: 272px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-right: 1px solid #dde4ed;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.07);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.sidebar-header {
+  padding: 15px 16px 12px;
+  border-bottom: 1px solid #eaeff5;
+}
+.sidebar-header h1 {
+  font-size: 16px; font-weight: 700; color: #1e293b;
+  display: flex; align-items: center; gap: 7px; letter-spacing: -0.3px;
+}
+.sidebar-header p { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+
+.sidebar-body {
+  flex: 1; padding: 10px 12px; overflow-y: auto;
+}
+.sidebar-body::-webkit-scrollbar { width: 4px; }
+.sidebar-body::-webkit-scrollbar-track { background: transparent; }
+.sidebar-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+
+.sidebar-footer {
+  padding: 11px 12px; border-top: 1px solid #eaeff5;
+  flex-shrink: 0; display: flex; flex-direction: column; gap: 6px;
+}
+
+/* ─── Sections ────────────────────────────────────────────── */
+.section { margin-bottom: 8px; }
+
+.section-title {
+  font-size: 10px; font-weight: 700; color: #94a3b8;
+  text-transform: uppercase; letter-spacing: 0.9px;
+  margin-bottom: 5px; padding-left: 2px;
+}
+
+.card {
+  background: #f7f9fc; border-radius: 9px;
+  padding: 10px 12px; border: 1px solid #e8edf5;
+}
+
+/* ─── Toggle buttons ─────────────────────────────────────── */
+.btn-group { display: flex; gap: 4px; }
+
+.tog {
+  flex: 1; padding: 5px 4px; font-size: 12px; font-weight: 500;
+  background: #f1f5f9; border: 1px solid #e2e8f0;
+  color: #64748b; border-radius: 6px; cursor: pointer;
+  text-align: center; white-space: nowrap;
+  transition: background 0.1s, color 0.1s, border-color 0.1s, box-shadow 0.1s;
+}
+.tog:hover:not(.on) { background: #e8eef6; }
+.tog.on { background: #3b82f6; border-color: #3b82f6; color: #fff; box-shadow: 0 1px 4px rgba(59,130,246,0.35); }
+
+/* ─── Selects ────────────────────────────────────────────── */
+select {
+  width: 100%; background: #f1f5f9; border: 1px solid #e2e8f0;
+  color: #334155; padding: 6px 8px; border-radius: 6px;
+  font-size: 12px; cursor: pointer;
+}
+select:focus { outline: none; border-color: #3b82f6; background: #fff; }
+
+/* ─── Slider rows (stacked layout — no clipping) ─────────── */
+.slider-row { margin-bottom: 9px; }
+.slider-row:last-child { margin-bottom: 0; }
+
+.slider-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 4px;
+}
+.slider-label { font-size: 12px; color: #64748b; }
+.slider-value {
+  font-size: 11px; color: #3b82f6; font-weight: 600;
+  background: #eff6ff; padding: 1px 7px; border-radius: 99px;
+  min-width: 52px; text-align: center; flex-shrink: 0;
+}
+input[type=range] { width: 100%; accent-color: #3b82f6; cursor: pointer; display: block; }
+
+/* ─── Preset buttons ──────────────────────────────────────── */
+.preset-group { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 8px; }
+
+.preset-btn {
+  padding: 4px 8px; font-size: 11px; font-weight: 500;
+  background: #f1f5f9; border: 1px solid #e2e8f0;
+  color: #475569; border-radius: 5px; cursor: pointer;
+  transition: all 0.1s; white-space: nowrap;
+}
+.preset-btn:hover { background: #dbeafe; border-color: #93c5fd; color: #1d4ed8; }
+.preset-btn.active { background: #dbeafe; border-color: #3b82f6; color: #1d4ed8; }
+
+/* ─── Margins ─────────────────────────────────────────────── */
+.margins-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.margin-field { display: flex; flex-direction: column; gap: 3px; }
+.margin-field span { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
+.margin-field input {
+  background: #f1f5f9; border: 1px solid #e2e8f0; color: #334155;
+  padding: 5px 6px; border-radius: 6px; font-size: 12px;
+  width: 100%; text-align: center;
+}
+.margin-field input:focus { outline: none; border-color: #3b82f6; background: #fff; }
+
+/* ─── Checkboxes ──────────────────────────────────────────── */
+.check-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 5px; cursor: pointer; user-select: none;
+}
+.check-row:last-of-type { margin-bottom: 0; }
+.check-row input[type=checkbox] { accent-color: #3b82f6; width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
+.check-row span { font-size: 12px; color: #64748b; }
+
+/* ─── Divider ─────────────────────────────────────────────── */
+.divider { height: 1px; background: #e8edf5; margin: 8px 0; }
+
+/* ─── Arbitrary lines ─────────────────────────────────────── */
+.arb-item {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 7px;
+  padding: 9px 10px 8px; margin-bottom: 6px; position: relative;
+}
+.arb-item select { margin-bottom: 6px; background: #f1f5f9; }
+.arb-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 6px; }
+.arb-row:last-child { margin-bottom: 0; }
+.arb-row label { font-size: 11px; color: #94a3b8; flex: 1; }
+.arb-row input[type=number] {
+  width: 78px; flex-shrink: 0; background: #f1f5f9; border: 1px solid #e2e8f0;
+  color: #334155; padding: 4px 6px; border-radius: 5px; font-size: 12px; text-align: center;
+}
+.arb-row select { width: 90px; flex-shrink: 0; margin-bottom: 0; }
+
+.del-btn {
+  position: absolute; top: 7px; right: 8px;
+  background: none; border: none; color: #c9d4df;
+  font-size: 17px; cursor: pointer; line-height: 1;
+  padding: 0 3px; border-radius: 3px; transition: color 0.1s;
+}
+.del-btn:hover { color: #ef4444; }
+
+.add-arb {
+  width: 100%; padding: 7px; background: none; border: 1px dashed #c9d4df;
+  color: #94a3b8; border-radius: 7px; cursor: pointer; font-size: 12px;
+  transition: all 0.1s;
+}
+.add-arb:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
+
+/* ─── Footer buttons ──────────────────────────────────────── */
+.btn-primary {
+  width: 100%; padding: 10px; background: #3b82f6; border: none;
+  color: #fff; border-radius: 8px; cursor: pointer; font-size: 13px;
+  font-weight: 600; transition: background 0.1s;
+}
+.btn-primary:hover { background: #2563eb; }
+
+.btn-secondary {
+  width: 100%; padding: 8px; background: #f1f5f9; border: 1px solid #e2e8f0;
+  color: #475569; border-radius: 8px; cursor: pointer; font-size: 12px;
+  font-weight: 500; transition: all 0.1s;
+}
+.btn-secondary:hover { background: #e2e8f0; color: #1e293b; }
+
+/* ─── Dimmed state ────────────────────────────────────────── */
+.dimmed { opacity: 0.28; pointer-events: none; }
+
+/* ─── Preview ─────────────────────────────────────────────── */
+#preview {
+  flex: 1; display: flex; align-items: flex-start; justify-content: center;
+  padding: 28px; overflow: auto; background: #dce3ec;
+}
+#paper {
+  box-shadow: 0 4px 28px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.1);
+  border: 1px solid #c8d3de; flex-shrink: 0;
+}
+
+/* ─── Print ───────────────────────────────────────────────── */
+@media print {
+  body { display: block; height: auto; overflow: visible; background: white; }
+  #sidebar { display: none !important; }
+  #preview { display: block; padding: 0; margin: 0; overflow: visible; background: white; }
+  #paper { box-shadow: none; border: none; display: block; }
+}
+
+/* ─── Template buttons ───────────────────────────────────── */
+.tpl-btn {
+  display: flex; align-items: flex-start; gap: 9px;
+  width: 100%; padding: 8px 10px;
+  background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 7px; cursor: pointer;
+  text-align: left; transition: all 0.12s; margin-bottom: 5px;
+}
+.tpl-btn:last-child { margin-bottom: 0; }
+.tpl-btn:hover:not(.on) { background: #eef2ff; border-color: #c7d2fe; }
+.tpl-btn.on {
+  background: #eff6ff; border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+.tpl-icon { font-size: 20px; line-height: 1.1; flex-shrink: 0; margin-top: 1px; }
+.tpl-info { display: flex; flex-direction: column; gap: 2px; }
+.tpl-name { font-size: 12px; font-weight: 600; color: #334155; }
+.tpl-desc { font-size: 10px; color: #94a3b8; line-height: 1.4; }
+.tpl-btn.on .tpl-name { color: #1d4ed8; }
+.tpl-btn.on .tpl-desc { color: #60a5fa; }
+
+.tpl-active-badge {
+  display: none; align-items: center; gap: 6px;
+  background: #eff6ff; border: 1px solid #bfdbfe;
+  border-radius: 6px; padding: 5px 9px; margin-bottom: 8px;
+  font-size: 11px; color: #1d4ed8;
+}
+.tpl-active-badge.show { display: flex; }
+.tpl-active-badge button {
+  margin-left: auto; background: none; border: none;
+  color: #94a3b8; cursor: pointer; font-size: 14px; line-height: 1; padding: 0;
+}
+.tpl-active-badge button:hover { color: #ef4444; }
+</style>
+</head>
+<body>
+
+<!-- ═════════════════ SIDEBAR ═════════════════ -->
+<div id="sidebar">
+
+  <div class="sidebar-header">
+    <h1>📄 Paper Generator</h1>
+    <p>Design and print custom lined, graph, or dot paper</p>
+  </div>
+
+  <div class="sidebar-body">
+
+    <!-- Presets -->
+    <div class="section">
+      <div class="section-title">Presets</div>
+      <div class="card">
+        <div class="btn-group" id="presetBtns">
+          <button class="tog on" data-preset="lined"   onclick="applyPreset('lined')">Lined</button>
+          <button class="tog"    data-preset="midline" onclick="applyPreset('midline')">Middle Line</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Templates -->
+    <div class="section">
+      <div class="section-title">Templates</div>
+      <div id="tplBadge" class="tpl-active-badge">
+        <span>✦ Template active</span>
+        <button onclick="clearTemplate()" title="Return to custom">×</button>
+      </div>
+      <div class="card" style="padding:8px">
+        <button class="tpl-btn" data-tpl="lean" onclick="setTemplate(this)">
+          <span class="tpl-icon">🔍</span>
+          <div class="tpl-info">
+            <span class="tpl-name">Lean A3 Problem Solving</span>
+            <span class="tpl-desc">Background · Target · Root cause · Actions · Follow-up</span>
+          </div>
+        </button>
+        <button class="tpl-btn" data-tpl="planner" onclick="setTemplate(this)">
+          <span class="tpl-icon">📅</span>
+          <div class="tpl-info">
+            <span class="tpl-name">Daily Planner</span>
+            <span class="tpl-desc">Schedule · Priorities · To-do list · Notes</span>
+          </div>
+        </button>
+        <button class="tpl-btn" data-tpl="music" onclick="setTemplate(this)">
+          <span class="tpl-icon">🎵</span>
+          <div class="tpl-info">
+            <span class="tpl-name">Music Staff Paper</span>
+            <span class="tpl-desc">12 staves · 4 bars each · Standard 5-line format</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Paper & Orientation -->
+    <div class="section">
+      <div class="section-title">Paper</div>
+      <div class="card">
+        <select id="paperSize" style="margin-bottom:8px" onchange="rebuildArbUI(); render()">
+          <option value="letter">US Letter  (8.5 × 11 in)</option>
+          <option value="a4">A4  (210 × 297 mm)</option>
+        </select>
+        <div class="btn-group" id="orientBtns">
+          <button class="tog on" data-v="portrait"  onclick="setOrient(this)">Portrait</button>
+          <button class="tog"    data-v="landscape" onclick="setOrient(this)">Landscape</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern -->
+    <div class="section">
+      <div class="section-title">Pattern</div>
+      <div class="card">
+        <div class="btn-group" id="patternBtns">
+          <button class="tog on" data-v="ruled"  onclick="setPattern(this)">Ruled</button>
+          <button class="tog"    data-v="graph"  onclick="setPattern(this)">Graph</button>
+          <button class="tog"    data-v="dot"    onclick="setPattern(this)">Dot Grid</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line Style -->
+    <div class="section" id="lineStyleSection">
+      <div class="section-title">Line Style</div>
+      <div class="card">
+        <div class="btn-group" id="lineStyleBtns">
+          <button class="tog on" data-v="solid"  onclick="setLineStyle(this)">Solid</button>
+          <button class="tog"    data-v="dashed" onclick="setLineStyle(this)">Dashed</button>
+          <button class="tog"    data-v="dotted" onclick="setLineStyle(this)">Dotted</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spacing -->
+    <div class="section">
+      <div class="section-title">Spacing</div>
+      <div class="card">
+        <div class="preset-group" id="spacingPresets">
+          <button class="preset-btn" data-mm="8.7"  onclick="setSpacingPreset(this)">Wide ruled</button>
+          <button class="preset-btn" data-mm="7.1"  onclick="setSpacingPreset(this)">College</button>
+          <button class="preset-btn" data-mm="6.4"  onclick="setSpacingPreset(this)">Narrow</button>
+          <button class="preset-btn" data-mm="5"    onclick="setSpacingPreset(this)">5 mm</button>
+          <button class="preset-btn" data-mm="10"   onclick="setSpacingPreset(this)">10 mm</button>
+        </div>
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Line spacing</span>
+            <span class="slider-value" id="spacingLbl">8.0 mm</span>
+          </div>
+          <input type="range" id="spacing" min="3" max="30" value="8" step="0.1"
+            oninput="clearPresetActive(); updateVal('spacingLbl', (+this.value).toFixed(1), ' mm'); render()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance -->
+    <div class="section">
+      <div class="section-title">Appearance</div>
+      <div class="card">
+        <div class="slider-row" id="lineWeightRow">
+          <div class="slider-header">
+            <span class="slider-label">Line weight</span>
+            <span class="slider-value" id="lineWeightLbl">0.30 mm</span>
+          </div>
+          <input type="range" id="lineWeight" min="0.05" max="1.5" value="0.3" step="0.05"
+            oninput="updateVal('lineWeightLbl', (+this.value).toFixed(2), ' mm'); render()">
+        </div>
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Opacity</span>
+            <span class="slider-value" id="opacityLbl">35%</span>
+          </div>
+          <input type="range" id="opacity" min="2" max="100" value="35"
+            oninput="updateVal('opacityLbl', this.value, '%'); render()">
+        </div>
+        <div class="slider-row dimmed" id="dotRadRow">
+          <div class="slider-header">
+            <span class="slider-label">Dot radius</span>
+            <span class="slider-value" id="dotRadLbl">0.7 mm</span>
+          </div>
+          <input type="range" id="dotRad" min="0.2" max="2.5" value="0.7" step="0.1"
+            oninput="updateVal('dotRadLbl', this.value, ' mm'); render()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Margins -->
+    <div class="section">
+      <div class="section-title">Margins (mm)</div>
+      <div class="card">
+        <div class="margins-grid">
+          <div class="margin-field"><span>Top</span>    <input type="number" id="mTop"    value="20" min="0" max="120" onchange="render()"></div>
+          <div class="margin-field"><span>Bottom</span> <input type="number" id="mBottom" value="20" min="0" max="120" onchange="render()"></div>
+          <div class="margin-field"><span>Left</span>   <input type="number" id="mLeft"   value="20" min="0" max="120" onchange="render()"></div>
+          <div class="margin-field"><span>Right</span>  <input type="number" id="mRight"  value="20" min="0" max="120" onchange="render()"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="section">
+      <div class="section-title">Options</div>
+      <div class="card">
+        <label class="check-row">
+          <input type="checkbox" id="optHeader"     checked onchange="render()">
+          <span>Header line</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="optMarginLine" checked onchange="render()">
+          <span>Left margin line</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="optBorder"           onchange="render()">
+          <span>Page border</span>
+        </label>
+        <div class="divider"></div>
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Header / margin weight</span>
+            <span class="slider-value" id="heavyWeightLbl">0.80 mm</span>
+          </div>
+          <input type="range" id="heavyWeight" min="0.1" max="3" value="0.8" step="0.05"
+            oninput="updateVal('heavyWeightLbl', (+this.value).toFixed(2), ' mm'); render()">
+        </div>
+        <div class="slider-row">
+          <div class="slider-header">
+            <span class="slider-label">Header / margin opacity</span>
+            <span class="slider-value" id="heavyOpacityLbl">70%</span>
+          </div>
+          <input type="range" id="heavyOpacity" min="5" max="100" value="70"
+            oninput="updateVal('heavyOpacityLbl', this.value, '%'); render()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Extra Lines -->
+    <div class="section">
+      <div class="section-title">Extra Lines</div>
+      <div id="arbContainer"></div>
+      <button class="add-arb" onclick="addArbLine()">+ Add line</button>
+    </div>
+
+  </div><!-- /sidebar-body -->
+
+  <div class="sidebar-footer">
+    <button class="btn-primary"   onclick="window.print()">🖨&thinsp; Print</button>
+    <button class="btn-secondary" onclick="downloadSVG()">↓ Download SVG</button>
+  </div>
+
+</div><!-- /sidebar -->
+
+
+<!-- ═════════════════ PREVIEW ═════════════════ -->
+<div id="preview">
+  <svg id="paper" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<style id="print-style"></style>
+
+<script>
+'use strict';
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let pattern     = 'ruled';
+let lineStyle   = 'solid';
+let orientation = 'portrait';
+let arbLines    = [];
+let nextId      = 1;
+
+const SIZES = {
+  letter: { w: 215.9, h: 279.4 },
+  a4:     { w: 210,   h: 297   }
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const el = id => document.getElementById(id);
+const fv = id => parseFloat(el(id).value);
+const bv = id => el(id).checked;
+
+function updateVal(labelId, val, suffix) {
+  el(labelId).textContent = val + suffix;
+}
+
+function getDims() {
+  const s = SIZES[el('paperSize').value];
+  return orientation === 'landscape' ? { w: s.h, h: s.w } : { w: s.w, h: s.h };
+}
+
+function activateGroup(groupId, btn) {
+  el(groupId).querySelectorAll('.tog').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+// ── Pattern / style setters ───────────────────────────────────────────────────
+function setOrient(btn) {
+  activateGroup('orientBtns', btn);
+  orientation = btn.dataset.v;
+  rebuildArbUI();
+  render();
+}
+
+function setPattern(btn) {
+  activateGroup('patternBtns', btn);
+  pattern = btn.dataset.v;
+  const isDot = (pattern === 'dot');
+  el('lineStyleSection').classList.toggle('dimmed', isDot);
+  el('lineWeightRow').classList.toggle('dimmed', isDot);
+  el('dotRadRow').classList.toggle('dimmed', !isDot);
+  render();
+}
+
+function setLineStyle(btn) {
+  activateGroup('lineStyleBtns', btn);
+  lineStyle = btn.dataset.v;
+  render();
+}
+
+// ── Spacing presets ───────────────────────────────────────────────────────────
+function setSpacingPreset(btn) {
+  const mm = parseFloat(btn.dataset.mm);
+  el('spacing').value = mm;
+  updateVal('spacingLbl', mm % 1 === 0 ? mm : mm.toFixed(1), ' mm');
+  document.querySelectorAll('#spacingPresets .preset-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function clearPresetActive() {
+  document.querySelectorAll('#spacingPresets .preset-btn').forEach(b => b.classList.remove('active'));
+}
+
+// ── Arbitrary lines ───────────────────────────────────────────────────────────
+function addArbLine() {
+  const { w } = getDims();
+  arbLines.push({ id: nextId++, dir: 'v', pos: +(w / 2).toFixed(1), style: 'solid', weight: 0.5, opacity: 70 });
+  rebuildArbUI();
+  render();
+}
+
+// eslint-disable-next-line no-unused-vars
+function removeArbLine(id) {
+  arbLines = arbLines.filter(l => l.id !== id);
+  rebuildArbUI();
+  render();
+}
+
+// eslint-disable-next-line no-unused-vars
+function setArbProp(id, prop, raw) {
+  const line = arbLines.find(l => l.id === id);
+  if (!line) return;
+  line[prop] = (prop === 'dir' || prop === 'style') ? raw : parseFloat(raw);
+  if (prop === 'dir') rebuildArbUI();
+  render();
+}
+
+function rebuildArbUI() {
+  const { w, h } = getDims();
+  el('arbContainer').innerHTML = arbLines.map(l => {
+    const posLabel = l.dir === 'v' ? 'Position (mm from left)' : 'Position (mm from top)';
+    const maxPos   = l.dir === 'v' ? w : h;
+    return `
+<div class="arb-item">
+  <button class="del-btn" onclick="removeArbLine(${l.id})" title="Remove">×</button>
+  <select onchange="setArbProp(${l.id},'dir',this.value)">
+    <option value="v" ${l.dir==='v'?'selected':''}>Vertical  |</option>
+    <option value="h" ${l.dir==='h'?'selected':''}>Horizontal —</option>
+  </select>
+  <div class="arb-row">
+    <label>${posLabel}</label>
+    <input type="number" value="${l.pos}" min="0" max="${maxPos.toFixed(1)}" step="0.5"
+      onchange="setArbProp(${l.id},'pos',this.value)">
+  </div>
+  <div class="arb-row">
+    <label>Style</label>
+    <select style="width:90px;margin-bottom:0" onchange="setArbProp(${l.id},'style',this.value)">
+      <option value="solid"  ${l.style==='solid' ?'selected':''}>Solid</option>
+      <option value="dashed" ${l.style==='dashed'?'selected':''}>Dashed</option>
+      <option value="dotted" ${l.style==='dotted'?'selected':''}>Dotted</option>
+    </select>
+  </div>
+  <div class="arb-row">
+    <label>Weight (mm)</label>
+    <input type="number" value="${l.weight}" min="0.05" max="5" step="0.05"
+      onchange="setArbProp(${l.id},'weight',this.value)">
+  </div>
+  <div class="arb-row">
+    <label>Opacity (%)</label>
+    <input type="number" value="${l.opacity}" min="1" max="100" step="1"
+      onchange="setArbProp(${l.id},'opacity',this.value)">
+  </div>
+</div>`;
+  }).join('');
+}
+
+// ── SVG stroke dash helper ────────────────────────────────────────────────────
+function strokeDash(style, w) {
+  if (style === 'dashed') return `stroke-dasharray="${+(w * 5).toFixed(3)} ${+(w * 3).toFixed(3)}"`;
+  if (style === 'dotted') return `stroke-dasharray="0.01 ${+(w * 5).toFixed(3)}" stroke-linecap="round"`;
+  return '';
+}
+
+// ── Build SVG inner content (shared by render + download) ─────────────────────
+function buildContent(W, H) {
+  const spacing   = fv('spacing');
+  const weight    = fv('lineWeight');
+  const opacity   = fv('opacity') / 100;
+  const dotRad    = fv('dotRad');
+  const mTop      = fv('mTop');
+  const mBottom   = fv('mBottom');
+  const mLeft     = fv('mLeft');
+  const mRight    = fv('mRight');
+  const hasHeader = bv('optHeader');
+  const hasMLine  = bv('optMarginLine');
+  const hasBorder = bv('optBorder');
+  const hWeight   = fv('heavyWeight');
+  const hOpacity  = fv('heavyOpacity') / 100;
+
+  const p = [];
+
+  p.push(`<defs><clipPath id="pg"><rect x="0" y="0" width="${W}" height="${H}"/></clipPath></defs>`);
+  p.push(`<rect x="0" y="0" width="${W}" height="${H}" fill="white"/>`);
+  p.push(`<g clip-path="url(#pg)">`);
+
+  if (hasBorder) {
+    p.push(`<rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" fill="none" stroke="black" stroke-width="0.4" opacity="0.4"/>`);
+  }
+
+  const x1 = mLeft,  x2 = W - mRight;
+  const y1 = mTop,   y2 = H - mBottom;
+
+  // ── Ruled / Graph ──────────────────────────────────────────────────────────
+  if (pattern === 'ruled' || pattern === 'graph') {
+    const da = strokeDash(lineStyle, weight);
+    const startY = hasHeader ? y1 + spacing : y1;
+
+    for (let y = startY; y <= y2 + 0.001; y += spacing) {
+      const yy = +y.toFixed(4);
+      p.push(`<line x1="${x1}" y1="${yy}" x2="${x2}" y2="${yy}" stroke="black" stroke-width="${weight}" opacity="${opacity}" ${da}/>`);
+    }
+
+    if (pattern === 'graph') {
+      for (let x = x1; x <= x2 + 0.001; x += spacing) {
+        const xx = +x.toFixed(4);
+        p.push(`<line x1="${xx}" y1="${y1}" x2="${xx}" y2="${y2}" stroke="black" stroke-width="${weight}" opacity="${opacity}" ${da}/>`);
+      }
+    }
+  }
+
+  // ── Dot grid ───────────────────────────────────────────────────────────────
+  if (pattern === 'dot') {
+    const startY = hasHeader ? y1 + spacing : y1;
+    for (let y = startY; y <= y2 + 0.001; y += spacing) {
+      for (let x = x1; x <= x2 + 0.001; x += spacing) {
+        p.push(`<circle cx="${+x.toFixed(4)}" cy="${+y.toFixed(4)}" r="${dotRad}" fill="black" opacity="${opacity}"/>`);
+      }
+    }
+  }
+
+  // ── Header line ────────────────────────────────────────────────────────────
+  if (hasHeader) {
+    p.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y1}" stroke="black" stroke-width="${hWeight}" opacity="${hOpacity}"/>`);
+  }
+
+  // ── Left margin line ───────────────────────────────────────────────────────
+  if (hasMLine) {
+    p.push(`<line x1="${x1}" y1="${y1}" x2="${x1}" y2="${y2}" stroke="black" stroke-width="${hWeight}" opacity="${hOpacity}"/>`);
+  }
+
+  // ── Arbitrary lines ────────────────────────────────────────────────────────
+  for (const al of arbLines) {
+    const ao = al.opacity / 100;
+    const da = strokeDash(al.style, al.weight);
+    if (al.dir === 'v') {
+      const x = Math.max(0, Math.min(al.pos, W));
+      p.push(`<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="black" stroke-width="${al.weight}" opacity="${ao}" ${da}/>`);
+    } else {
+      const y = Math.max(0, Math.min(al.pos, H));
+      p.push(`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="black" stroke-width="${al.weight}" opacity="${ao}" ${da}/>`);
+    }
+  }
+
+  p.push('</g>');
+  return p.join('\n');
+}
+
+// ── Main render ───────────────────────────────────────────────────────────────
+function render() {
+  const { w: W, h: H } = getDims();
+
+  // Scale to fill available preview space — no artificial 1× cap
+  const preview = el('preview');
+  const avW = Math.max(100, preview.clientWidth  - 56);
+  const avH = Math.max(100, preview.clientHeight - 56);
+  const scale = Math.min(avW / W, avH / H) * 0.95;
+  const dW = Math.round(W * scale);
+  const dH = Math.round(H * scale);
+
+  // Dynamic @page for printing
+  const base = SIZES[el('paperSize').value];
+  const pw = orientation === 'landscape' ? base.h : base.w;
+  const ph = orientation === 'landscape' ? base.w : base.h;
+  el('print-style').textContent = `
+    @media print {
+      @page { size: ${pw}mm ${ph}mm; margin: 0; }
+      #paper { width: ${pw}mm !important; height: ${ph}mm !important; display: block; }
+    }`;
+
+  const svg = el('paper');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width',  dW);
+  svg.setAttribute('height', dH);
+  svg.style.background = 'white';
+  svg.innerHTML = activeTemplate ? buildTemplate(activeTemplate, W, H) : buildContent(W, H);
+}
+
+// ── Download SVG ──────────────────────────────────────────────────────────────
+// eslint-disable-next-line no-unused-vars
+function downloadSVG() {
+  const { w: W, h: H } = getDims();
+  const svgStr = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}mm" height="${H}mm">
+${buildContent(W, H)}
+</svg>`;
+  const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'paper.svg';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Presets ─────────────────────────────────────────────────────────────────
+function applyPreset(name) {
+  // Deactivate any SVG template without re-rendering
+  activeTemplate = null;
+  document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('on'));
+  el('tplBadge').classList.remove('show');
+
+  // Highlight the active preset button
+  const presetBtn = document.querySelector(`#presetBtns [data-preset="${name}"]`);
+  if (presetBtn) activateGroup('presetBtns', presetBtn);
+
+  // Apply shared base settings
+  pattern = 'ruled';
+  const ruledBtn = document.querySelector('#patternBtns [data-v="ruled"]');
+  if (ruledBtn) activateGroup('patternBtns', ruledBtn);
+  el('lineStyleSection').classList.remove('dimmed');
+  el('lineWeightRow').classList.remove('dimmed');
+  el('dotRadRow').classList.add('dimmed');
+
+  lineStyle = 'solid';
+  const solidBtn = document.querySelector('#lineStyleBtns [data-v="solid"]');
+  if (solidBtn) activateGroup('lineStyleBtns', solidBtn);
+
+  el('spacing').value = 8;         updateVal('spacingLbl', '8.0', ' mm');
+  clearPresetActive();
+  el('lineWeight').value = 0.25;   updateVal('lineWeightLbl', '0.25', ' mm');
+  el('opacity').value    = 17;     updateVal('opacityLbl', '17', '%');
+
+  el('mTop').value    = 10;
+  el('mBottom').value = 1;
+  el('mLeft').value   = 0;
+  el('mRight').value  = 0;
+
+  el('optHeader').checked     = false;
+  el('optMarginLine').checked = false;
+  el('optBorder').checked     = false;
+
+  // Extra lines
+  arbLines = [];
+  if (name === 'midline') {
+    const W = getDims().w;
+    arbLines = [{ id: nextId++, dir: 'v', pos: +(W / 2).toFixed(1), style: 'solid', weight: 0.4, opacity: 5 }];
+  }
+  rebuildArbUI();
+  render();
+}
+
+// ── Template state ───────────────────────────────────────────────────────────
+let activeTemplate = null;
+
+// eslint-disable-next-line no-unused-vars
+function setTemplate(btn) {
+  const name = btn.dataset.tpl;
+  activeTemplate = (activeTemplate === name) ? null : name;
+  document.querySelectorAll('.tpl-btn').forEach(b =>
+    b.classList.toggle('on', b.dataset.tpl === activeTemplate));
+  el('tplBadge').classList.toggle('show', activeTemplate !== null);
+  render();
+}
+
+// eslint-disable-next-line no-unused-vars
+function clearTemplate() {
+  activeTemplate = null;
+  document.querySelectorAll('.tpl-btn').forEach(b => b.classList.remove('on'));
+  el('tplBadge').classList.remove('show');
+  render();
+}
+
+function buildTemplate(name, W, H) {
+  if (name === 'lean')    return buildLeanTemplate(W, H);
+  if (name === 'planner') return buildPlannerTemplate(W, H);
+  if (name === 'music')   return buildMusicTemplate(W, H);
+  return '';
+}
+
+// ── Template SVG helpers ───────────────────────────────────────────────────────
+function tplClip(W, H) {
+  return `<defs><clipPath id="pg"><rect x="0" y="0" width="${W}" height="${H}"/></clipPath></defs>\n<rect x="0" y="0" width="${W}" height="${H}" fill="white"/>\n<g clip-path="url(#pg)">`;
+}
+
+function tplBox(x, y, w, h, label, fs) {
+  const f = fs || 3.0;
+  const xx = +x.toFixed(3), yy = +y.toFixed(3), ww = +w.toFixed(3), hh = +h.toFixed(3);
+  return [
+    `<rect x="${xx}" y="${yy}" width="${ww}" height="${hh}" fill="none" stroke="black" stroke-width="0.4" opacity="0.75"/>`,
+    `<text x="${+(x+2).toFixed(3)}" y="${+(y+f+0.8).toFixed(3)}" font-size="${f}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold" letter-spacing="0.2">${label}</text>`
+  ].join('\n');
+}
+
+function tplRuled(x, y, w, h, spacing, topIndent) {
+  const lines = [];
+  for (let ly = y + (topIndent || 0); ly <= y + h - 1; ly += spacing) {
+    lines.push(`<line x1="${+(x+1.5).toFixed(3)}" y1="${+ly.toFixed(3)}" x2="${+(x+w-1.5).toFixed(3)}" y2="${+ly.toFixed(3)}" stroke="black" stroke-width="0.2" opacity="0.2"/>`);
+  }
+  return lines.join('\n');
+}
+
+// ── Lean A3 Problem Solving ────────────────────────────────────────────────────
+function buildLeanTemplate(W, H) {
+  const p = [];
+  const M  = 10, fs = 2.8;
+  const cW = W - M * 2, cH = H - M * 2;
+
+  p.push(tplClip(W, H));
+
+  // Title bar
+  const titleH = 14;
+  const bodyY  = M + titleH;
+  const bodyH  = cH - titleH;
+  const colGap = 5;
+  const lW     = (cW - colGap) * 0.47;
+  const rW     = cW - lW - colGap;
+  const lX     = M, rX = M + lW + colGap;
+
+  p.push(`<rect x="${M}" y="${M}" width="${cW}" height="${titleH}" fill="none" stroke="black" stroke-width="0.5" opacity="0.8"/>`);
+  const t1 = cW * 0.52, t2 = cW * 0.26;
+  p.push(`<line x1="${+(M+t1).toFixed(2)}" y1="${M}" x2="${+(M+t1).toFixed(2)}" y2="${M+titleH}" stroke="black" stroke-width="0.35" opacity="0.6"/>`);
+  p.push(`<line x1="${+(M+t1+t2).toFixed(2)}" y1="${M}" x2="${+(M+t1+t2).toFixed(2)}" y2="${M+titleH}" stroke="black" stroke-width="0.35" opacity="0.6"/>`);
+  p.push(`<text x="${M+2}" y="${+(M+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">THEME / PROBLEM STATEMENT</text>`);
+  p.push(`<text x="${+(M+t1+2).toFixed(2)}" y="${+(M+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">OWNER</text>`);
+  p.push(`<text x="${+(M+t1+t2+2).toFixed(2)}" y="${+(M+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">DATE</text>`);
+
+  // Left column
+  const lSecs = [
+    { label: 'BACKGROUND / CURRENT STATE',  r: 0.27 },
+    { label: 'TARGET CONDITION / GOAL',     r: 0.23 },
+    { label: 'ROOT CAUSE ANALYSIS (5-Why)', r: 0.28 },
+    { label: 'GAP ANALYSIS',                r: 0.22 },
+  ];
+  let cy = bodyY;
+  for (const s of lSecs) {
+    const sh = bodyH * s.r;
+    p.push(tplBox(lX, cy, lW, sh, s.label, fs));
+    p.push(tplRuled(lX, cy, lW, sh, 5.5, fs + 2.5));
+    cy += sh;
+  }
+
+  // Right column
+  const rSecs = [
+    { label: 'COUNTERMEASURES / ACTION PLAN', r: 0.30 },
+    { label: 'RESULTS / EFFECT CONFIRMATION', r: 0.26 },
+    { label: 'COST / BENEFIT',                r: 0.22 },
+    { label: 'FOLLOW-UP / LESSONS LEARNED',   r: 0.22 },
+  ];
+  cy = bodyY;
+  for (const s of rSecs) {
+    const sh = bodyH * s.r;
+    p.push(tplBox(rX, cy, rW, sh, s.label, fs));
+    p.push(tplRuled(rX, cy, rW, sh, 5.5, fs + 2.5));
+    cy += sh;
+  }
+
+  p.push('</g>');
+  return p.join('\n');
+}
+
+// ── Daily Planner ──────────────────────────────────────────────────────────────
+function buildPlannerTemplate(W, H) {
+  const p = [];
+  const M  = 10, fs = 2.8;
+  const cX = M, cY = M;
+  const cW = W - M * 2, cH = H - M * 2;
+
+  p.push(tplClip(W, H));
+
+  // Date header
+  const hdrH = 16;
+  p.push(`<rect x="${cX}" y="${cY}" width="${cW}" height="${hdrH}" fill="none" stroke="black" stroke-width="0.5" opacity="0.8"/>`);
+  const h1 = 28, h2 = 55;
+  p.push(`<line x1="${cX+h1}" y1="${cY}" x2="${cX+h1}" y2="${cY+hdrH}" stroke="black" stroke-width="0.35" opacity="0.6"/>`);
+  p.push(`<line x1="${cX+h1+h2}" y1="${cY}" x2="${cX+h1+h2}" y2="${cY+hdrH}" stroke="black" stroke-width="0.35" opacity="0.6"/>`);
+  p.push(`<text x="${cX+2}" y="${+(cY+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">DAY</text>`);
+  p.push(`<text x="${cX+h1+2}" y="${+(cY+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">DATE</text>`);
+  p.push(`<text x="${cX+h1+h2+2}" y="${+(cY+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">TODAY'S FOCUS / INTENTION</text>`);
+
+  // Top 3 priorities
+  const priY = cY + hdrH, priH = 27;
+  p.push(tplBox(cX, priY, cW, priH, 'TOP 3 PRIORITIES', fs));
+  const pl = (priH - fs - 3) / 3;
+  for (let i = 0; i < 3; i++) {
+    const ly = priY + fs + 3 + i * pl + pl * 0.75;
+    p.push(`<text x="${cX+2}" y="${+ly.toFixed(2)}" font-size="3.8" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.28">${i+1}.</text>`);
+    p.push(`<line x1="${cX+8}" y1="${+ly.toFixed(2)}" x2="${cX+cW-1.5}" y2="${+ly.toFixed(2)}" stroke="black" stroke-width="0.2" opacity="0.2"/>`);
+  }
+
+  // Middle: Schedule + To-Do
+  const midY    = priY + priH;
+  const notesH  = 52;
+  const midH    = cH - hdrH - priH - notesH - 4;
+  const schedW  = cW * 0.43;
+  const todoX   = cX + schedW + 4;
+  const todoW   = cW - schedW - 4;
+  const timeTop = midY + fs + 2.5;
+  const timeLW  = 13;
+
+  // Schedule box
+  p.push(`<rect x="${cX}" y="${midY}" width="${+schedW.toFixed(2)}" height="${+midH.toFixed(2)}" fill="none" stroke="black" stroke-width="0.4" opacity="0.75"/>`);
+  p.push(`<text x="${cX+2}" y="${+(midY+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">SCHEDULE</text>`);
+  p.push(`<line x1="${cX+timeLW}" y1="${+timeTop.toFixed(2)}" x2="${cX+timeLW}" y2="${+(midY+midH).toFixed(2)}" stroke="black" stroke-width="0.2" opacity="0.22"/>`);
+
+  const slotStart = 6, slotEnd = 21;
+  const slots     = (slotEnd - slotStart) * 2;
+  const slotH     = (midH - fs - 2.5) / slots;
+  for (let i = 0; i <= slots; i++) {
+    const sy = timeTop + i * slotH;
+    const isHour = i % 2 === 0;
+    if (i < slots) {
+      p.push(`<line x1="${cX+1}" y1="${+sy.toFixed(3)}" x2="${+(cX+schedW-1).toFixed(3)}" y2="${+sy.toFixed(3)}" stroke="black" stroke-width="${isHour ? 0.28 : 0.14}" opacity="${isHour ? 0.3 : 0.15}"/>`);
+    }
+    if (isHour) {
+      const hr24 = slotStart + i / 2;
+      const hr12 = hr24 > 12 ? hr24 - 12 : (hr24 === 0 ? 12 : hr24);
+      const ap   = hr24 >= 12 ? 'p' : 'a';
+      p.push(`<text x="${cX+1}" y="${+(sy+2.3).toFixed(3)}" font-size="2.3" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.38">${hr12}${ap}</text>`);
+    }
+  }
+
+  // To-Do box
+  p.push(`<rect x="${+todoX.toFixed(2)}" y="${midY}" width="${+todoW.toFixed(2)}" height="${+midH.toFixed(2)}" fill="none" stroke="black" stroke-width="0.4" opacity="0.75"/>`);
+  p.push(`<text x="${+(todoX+2).toFixed(2)}" y="${+(midY+fs+0.8).toFixed(2)}" font-size="${fs}" font-family="Arial,Helvetica,sans-serif" fill="black" opacity="0.5" font-weight="bold">TO-DO</text>`);
+  const itemH     = 7;
+  const todoCount = Math.floor((midH - fs - 3) / itemH);
+  for (let i = 0; i < todoCount; i++) {
+    const ty = midY + fs + 3 + i * itemH + itemH * 0.7;
+    p.push(`<rect x="${+(todoX+2).toFixed(2)}" y="${+(ty-2.8).toFixed(2)}" width="3.5" height="3.5" fill="none" stroke="black" stroke-width="0.3" opacity="0.35"/>`);
+    p.push(`<line x1="${+(todoX+8).toFixed(2)}" y1="${+ty.toFixed(2)}" x2="${+(todoX+todoW-1.5).toFixed(2)}" y2="${+ty.toFixed(2)}" stroke="black" stroke-width="0.2" opacity="0.2"/>`);
+  }
+
+  // Notes
+  const notesY = midY + midH + 4;
+  p.push(tplBox(cX, notesY, cW, notesH, 'NOTES', fs));
+  p.push(tplRuled(cX, notesY, cW, notesH, 5.5, fs + 2.5));
+
+  p.push('</g>');
+  return p.join('\n');
+}
+
+// ── Music Staff Paper ──────────────────────────────────────────────────────────
+function buildMusicTemplate(W, H) {
+  const p = [];
+  const M  = 12;
+  const cX = M, cY = M;
+  const cW = W - M * 2, cH = H - M * 2;
+
+  p.push(tplClip(W, H));
+
+  const lineGap   = 2.0;           // mm between adjacent lines
+  const staffH    = lineGap * 4;   // top-to-bottom of 5-line staff = 8mm
+  const staffGap  = 14;            // space between staves
+  const unitH     = staffH + staffGap;
+  const numStaves = Math.floor((cH + staffGap) / unitH);
+  const barCount  = 4;
+  const barW      = cW / barCount;
+
+  for (let s = 0; s < numStaves; s++) {
+    const sY = cY + s * unitH;
+
+    // 5 staff lines
+    for (let ln = 0; ln < 5; ln++) {
+      const ly = sY + ln * lineGap;
+      p.push(`<line x1="${cX}" y1="${+ly.toFixed(3)}" x2="${cX+cW}" y2="${+ly.toFixed(3)}" stroke="black" stroke-width="0.3" opacity="0.8"/>`);
+    }
+
+    // Opening barline
+    p.push(`<line x1="${cX}" y1="${+sY.toFixed(3)}" x2="${cX}" y2="${+(sY+staffH).toFixed(3)}" stroke="black" stroke-width="0.5" opacity="0.8"/>`);
+
+    // Interior barlines
+    for (let b = 1; b < barCount; b++) {
+      const bx = cX + b * barW;
+      p.push(`<line x1="${+bx.toFixed(3)}" y1="${+sY.toFixed(3)}" x2="${+bx.toFixed(3)}" y2="${+(sY+staffH).toFixed(3)}" stroke="black" stroke-width="0.3" opacity="0.55"/>`);
+    }
+
+    // Closing double barline
+    p.push(`<line x1="${+(cX+cW-1.4).toFixed(3)}" y1="${+sY.toFixed(3)}" x2="${+(cX+cW-1.4).toFixed(3)}" y2="${+(sY+staffH).toFixed(3)}" stroke="black" stroke-width="0.3" opacity="0.8"/>`);
+    p.push(`<line x1="${+(cX+cW).toFixed(3)}" y1="${+sY.toFixed(3)}" x2="${+(cX+cW).toFixed(3)}" y2="${+(sY+staffH).toFixed(3)}" stroke="black" stroke-width="0.8" opacity="0.8"/>`);
+  }
+
+  p.push('</g>');
+  return p.join('\n');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+window.addEventListener('resize', render);
+applyPreset('lined'); // default on load
+</script>
+</body>
+</html>
